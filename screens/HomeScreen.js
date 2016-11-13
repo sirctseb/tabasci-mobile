@@ -12,6 +12,7 @@ import {
 
 import { MonoText } from '../components/StyledText';
 import { NavList } from '../components/NavList';
+import { TabList } from '../components/TabList';
 
 export default class HomeScreen extends React.Component {
   static route = {
@@ -28,12 +29,19 @@ export default class HomeScreen extends React.Component {
   }
 
   titlePress(text) {
+    this.setState({
+      artist: this.state.artist,
+      title: text
+    })
+  }
+
+  tabPress(text) {
   }
 
   componentWillMount() {
     this.state = {
       artist: 'Frontier Ruckus',
-      title: ''
+      title: 'The Tower'
     };
   }
 
@@ -47,6 +55,8 @@ export default class HomeScreen extends React.Component {
           <NavList list='artistlist' onPress={this.artistPress.bind(this)} headerText='Artists'/>
 
           <NavList list={'titlelist/' + this.state.artist} onPress={this.titlePress.bind(this)} headerText='Titles'/>
+
+          <TabList list={'tablist/' + this.state.artist + '/' + this.state.title} onPress={this.tabPress.bind(this)} headerText='Tabs'/>
 
           <View style={styles.welcomeContainer}>
             <Image
