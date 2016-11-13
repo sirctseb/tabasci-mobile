@@ -28,6 +28,11 @@ var styles = StyleSheet.create({
     color: '#333',
     fontSize: 16,
   },
+  headerText: {
+    color: '#333',
+    fontSize: 16,
+    fontWeight: '800',
+  },
   navbar: {
     alignItems: 'center',
     backgroundColor: '#fff',

@@ -20,6 +20,23 @@ export default class HomeScreen extends React.Component {
     },
   }
 
+  artistPress(text) {
+    this.setState({
+      artist: text,
+      title: this.state.title,
+    });
+  }
+
+  titlePress(text) {
+  }
+
+  componentWillMount() {
+    this.state = {
+      artist: 'Frontier Ruckus',
+      title: ''
+    };
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -27,8 +44,9 @@ export default class HomeScreen extends React.Component {
           style={styles.container}
           contentContainerStyle={styles.contentContainer}>
 
-          <NavList list='artistlist'>
-          </NavList>
+          <NavList list='artistlist' onPress={this.artistPress.bind(this)} headerText='Artists'/>
+
+          <NavList list={'titlelist/' + this.state.artist} onPress={this.titlePress.bind(this)} headerText='Titles'/>
 
           <View style={styles.welcomeContainer}>
             <Image
@@ -124,7 +142,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   contentContainer: {
-    paddingTop: 80,
   },
   welcomeContainer: {
     alignItems: 'center',

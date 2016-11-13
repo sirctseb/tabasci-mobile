@@ -5,6 +5,7 @@ import {
   ListView,
   View } from 'react-native';
 import ListItem from './ListItem';
+import NavHeader from './NavHeader';
 import styles from '../styles.js';
 
 export class NavList extends React.Component {
@@ -19,7 +20,14 @@ export class NavList extends React.Component {
     this.itemsRef = firebase.database().ref(this.props.list);
   }
 
-  componentWillMount() {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.list != this.props.list) {
+      this.itemsRef = firebase.database().ref(nextProps.list);
+      this.loadList();
+    }
+  }
+
+  loadList() {
     this.itemsRef.on('value', (snap) => {
 
       // get children as an array
@@ -37,6 +45,10 @@ export class NavList extends React.Component {
     });
   }
 
+  componentWillMount() {
+    this.loadList()
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -44,27 +56,18 @@ export class NavList extends React.Component {
           dataSource={this.state.dataSource}
           renderRow={this._renderItem.bind(this)}
           enableEmptySections={true}
-          style={styles.listview}/>
+          style={styles.listview}
+          renderHeader={() => <NavHeader text={this.props.headerText}/>}/>
       </View>
     )
   }
 
   _renderItem(item) {
 
-    // const onPress = () => {
-    //   AlertIOS.alert(
-    //     'Complete',
-    //     null,
-    //     [
-    //       {text: 'Complete', onPress: (text) => this.itemsRef.child(item._key).remove()},
-    //       {text: 'Cancel', onPress: (text) => console.log('Cancelled')}
-    //     ]
-    //   );
-    // };
+    const onPress = () => { this.props.onPress(item.title); };
 
     return (
-      // <ListItem item={item} onPress={onPress} />
-      <ListItem item={item}/>
+      <ListItem item={item} onPress={onPress} />
     );
   }
 }
