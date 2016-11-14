@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Text } from 'react-native';
 import firebase from 'firebase';
@@ -65,7 +64,7 @@ export class TabList extends React.Component {
 
   _renderItem(item) {
 
-    const onPress = () => { this.props.onPress(item.title); };
+    const onPress = () => { this.props.onPress(item._key); };
 
     return (
       <TabListItem item={item} onPress={onPress} />
