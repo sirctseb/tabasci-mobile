@@ -46,7 +46,6 @@ export default class LinksScreen extends React.Component {
   }
 
   _renderRow(item) {
-    console.log('type: ' + item.child('type').val());
     if (item.child('type').val() === 'chords' || item.child('type').val() === 'lyrics') {
       return (<Text style={styles.line}>{item.child('content').val()}</Text>)
     }
