@@ -21,30 +21,24 @@ export default class LinksScreen extends React.Component {
     this.tabRef = firebase.database().ref('tabs/' + this.props.route.params.tab);
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
-      dataSource: ds.cloneWithRows(['0', '1', '3', '2'])
+      dataSource: ds
     }
     this.tabRef.once('value', (dataSnapshot) => {
+      var lines = [];
       dataSnapshot.child('document/lines').forEach((lineSnapshot) => {
-        if (lineSnapshot.child('type').val() === 'tab') {
-          var array = [];
-          lineSnapshot.child('strums').forEach((strumSnapshot) => {
-            array.push(strumSnapshot.child('contents/4').val());
-          });
-          this.setState({dataSource: ds.cloneWithRows(array)});
-          return true;
-        }
+        lines.push(lineSnapshot);
       });
+      this.setState({dataSource: ds.cloneWithRows(lines)});
     });
   }
 
   render() {
     return (
       <ScrollView
-        horizontal={true}
         style={styles.container}
         contentContainerStyle={this.props.route.getContentContainerStyle()}>
 
-        <ListView horizontal={true} dataSource={this.state.dataSource} renderRow={this._renderRow.bind(this)}/>
+        <ListView dataSource={this.state.dataSource} renderRow={this._renderRow.bind(this)}/>
         <Text>{ this.state.fullText }</Text>
 
       </ScrollView>
@@ -52,7 +46,11 @@ export default class LinksScreen extends React.Component {
   }
 
   _renderRow(item) {
-    return (<Text>{item !== '' ? item : '-'}</Text>)
+    console.log('type: ' + item.child('type').val());
+    if (item.child('type').val() === 'chords' || item.child('type').val() === 'lyrics') {
+      return (<Text style={styles.line}>{item.child('content').val()}</Text>)
+    }
+    return (<Text>Tab line would go here</Text>)
   }
 
 }
@@ -62,4 +60,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 15,
   },
+  line: {
+    fontFamily: 'monospace'
+  }
 });
