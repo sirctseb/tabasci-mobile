@@ -31,7 +31,7 @@ class AppContainer extends React.Component {
       apiKey: "AIzaSyAyTDi8Wtgkvkjqj7ciIXGI2DzxnvmpQYc",
 
       // Only needed if using Firebase Realtime Database (which we will be in this example)
-      databaseURL: "https://tabasci.firebaseio.com",
+      databaseURL: "https://tabasci-dev.firebaseio.com",
     };
 
     firebase.initializeApp(config);

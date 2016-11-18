@@ -41,8 +41,8 @@ export default class HomeScreen extends React.Component {
 
   componentWillMount() {
     this.state = {
-      artist: 'Frontier Ruckus',
-      title: 'The Tower'
+      artist: 'public',
+      title: 'title'
     };
   }
 
