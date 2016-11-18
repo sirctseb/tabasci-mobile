@@ -3,12 +3,13 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  ListView
+  ListView,
 } from 'react-native';
 import {
   ExponentLinksView,
 } from '@exponent/samples';
 import firebase from 'firebase';
+import {TabLine} from '../components/TabLine';
 
 export default class LinksScreen extends React.Component {
   static route = {
@@ -19,16 +20,16 @@ export default class LinksScreen extends React.Component {
 
   componentWillMount() {
     this.tabRef = firebase.database().ref('tabs/' + this.props.route.params.tab);
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      dataSource: ds
+      dataSource: this.ds.cloneWithRows([])
     }
-    this.tabRef.once('value', (dataSnapshot) => {
+    this.tabRef.on('value', (dataSnapshot) => {
       var lines = [];
       dataSnapshot.child('document/lines').forEach((lineSnapshot) => {
         lines.push(lineSnapshot);
       });
-      this.setState({dataSource: ds.cloneWithRows(lines)});
+      this.setState({dataSource: this.state.dataSource.cloneWithRows(lines)});
     });
   }
 
@@ -39,7 +40,6 @@ export default class LinksScreen extends React.Component {
         contentContainerStyle={this.props.route.getContentContainerStyle()}>
 
         <ListView dataSource={this.state.dataSource} renderRow={this._renderRow.bind(this)}/>
-        <Text>{ this.state.fullText }</Text>
 
       </ScrollView>
     );
@@ -49,9 +49,8 @@ export default class LinksScreen extends React.Component {
     if (item.child('type').val() === 'chords' || item.child('type').val() === 'lyrics') {
       return (<Text style={styles.line}>{item.child('content').val()}</Text>)
     }
-    return (<Text>Tab line would go here</Text>)
+    return (<TabLine line={item}/>)
   }
-
 }
 
 const styles = StyleSheet.create({
