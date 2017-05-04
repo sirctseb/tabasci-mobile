@@ -49,7 +49,11 @@ export default class LinksScreen extends React.Component {
     if (item.child('type').val() === 'chords' || item.child('type').val() === 'lyrics') {
       return (<Text style={styles.line}>{item.child('content').val()}</Text>)
     }
-    return (<TabLine line={item}/>)
+    var strums = [];
+    item.child('strums').forEach((strumSnapshot) => {
+      strums.push(strums);
+    });
+    return (<TabLine line={strums}/>)
   }
 }
 
